@@ -1,4 +1,4 @@
-# Nanopore genome analysis of Bacillus thuringiensis strain W-22
+# Nanopore Data Assembly and Quality Assessment Pipeline for Bacillus thuringiensis W-22
 
 An educational workflow for quality control, adapter trimming, de novo genome assembly and assembly evaluation using public Oxford Nanopore reads.
 
