@@ -16,7 +16,7 @@ What assembly can be reconstructed from these Nanopore reads, and how well do re
 
 ## Analysis workflow
 
-**Public SRA data → FASTQ extraction → FastQC and NanoPlot → Dorado adapter trimming → Flye assembly → QUAST and CheckM2 → Read mapping → Contig 2 verification**
+**Public SRA data → FASTQ extraction → FastQC and NanoPlot → Dorado adapter trimming → Flye assembly → QUAST and CheckM2 → Read mapping → Contigs verification**
 
 ## Input data
 
@@ -197,21 +197,6 @@ cat dorado_trimming/full_trimming.log
 - `>` saves reads; `2>` saves diagnostic messages.
 
 The log reported 168,347 reads written. A separate before/after sequence comparison found **38 changed reads** and **1,822 bases removed**. Those change counts came from the comparison, not directly from the Dorado log. They indicate a small amount of adapter-like sequence detected under these settings, not a general contamination percentage.
-
-## Computational resources
-
-| Parameter | Setting |
-|---|---|
-| Computer | Linux laptop |
-| Processor | Intel Core i9-13900H |
-| Logical CPUs available | 20 |
-| Installed RAM | Approximately 30 GiB |
-| Main analysis thread setting | 2 |
-| Assembly software | Flye 2.9.6 |
-| Job scheduler | None; commands run in the terminal |
-| Environment management | Conda |
-
-Two threads were used to keep the workload moderate. The setting is not a hard limit on all concurrent processes or a guarantee of temperature or total memory use.
 
 ## 4. Assemble the trimmed reads with Flye
 
@@ -434,15 +419,12 @@ The minus strand describes orientation and is not an error.
 
 ### Conclusion of contig 2 verification
 
-The combined evidence supports interpreting contig 2 as a **potentially redundant representation of a chromosomal rRNA-repeat region**: its complete sequence is represented through near-identical chromosome-candidate alignments, its read placement is ambiguous, and rRNA genes were predicted.
-
-Exclusion from a separately documented filtered assembly was discussed as reasonable, but **no removal was performed**. The recorded result remains the original six-contig assembly. These findings do not prove contamination, exclude every possible separate molecule, or establish the correct number of chromosomal rRNA-repeat copies.
+The combined evidence supports interpreting contig 2 as a **potentially redundant representation of a chromosomal rRNA-repeat region**: its complete sequence is represented through near-identical chromosome-candidate alignments, its read placement is ambiguous and rRNA genes were predicted.
 
 ## Overall findings
 
 The Nanopore workflow produced a highly contiguous six-contig assembly with encouraging genome-content estimates and read support. Adapter trimming changed 38 of 168,347 reads and removed 1,822 bases. Contig 2 showed the clearest concern in the mapping summary because coverage was incomplete and placement confidence was very low.
-
-The analysis is a training case study ending at contig 2 verification. The evidence supports a potentially redundant chromosomal rRNA-repeat component, but no contigs were removed. The reports do not establish a fully validated finished genome or confirm every contig as an independent circular molecule. Annotation is not included.
+The analysis is a training case study ending at contig 2 verification.
 
 ## Repository structure
 
