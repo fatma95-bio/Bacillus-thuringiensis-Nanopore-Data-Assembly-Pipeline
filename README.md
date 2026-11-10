@@ -1,14 +1,14 @@
-# Nanopore Data Assembly and Quality Assessment Pipeline for Bacillus thuringiensis strain
+# Nanopore Data Assembly and Quality Assessment Pipeline for Bacillus thuringiensis 
 
-An educational workflow for read quality control, adapter trimming, de novo genome assembly and assembly quality assessment using public Oxford Nanopore reads of **Bacillus thuringiensis strain W-22**. 
+An educational workflow for reads quality control, adapters trimming, de novo genome assembly and assembly quality assessment using public Oxford Nanopore reads of **Bacillus thuringiensis**. 
 
 ## Project overview
 
 Oxford Nanopore reads can span repetitive DNA regions and help reconstruct bacterial chromosomes and plasmids. However, repeats and small contigs may still require additional checks to assess how confidently they were assembled.
 
-This repository documents a practical training in genome assembly using public Bacillus thuringiensis  sequencing data. The analysis was performed on a Linux laptop using Conda environments and covers read quality assessment, adapter trimming, de novo assembly and evaluation through genome quality estimates and read mapping.
+This repository documents a practical training in genome assembly using public Bacillus thuringiensis sequencing data. The analysis was performed on a Linux laptop using Conda environments and covers reads quality assessment, adapters trimming, de novo assembly and evaluation through genome quality estimates and read mapping.
 
-The aim is to help students and beginners follow the analysis, understand the outputs of each tool and recognize the limitations of assembly quality metrics. The sequencing data were generated and deposited by the original study contributors.
+The aim is to help students and beginners follow the analysis, understand the outputs of each tool and recognize the limitations of assembly quality metrics.
 
 ## Analysis question
 
@@ -426,10 +426,6 @@ The analysis is a training case study ending at contig 2 verification.
 
 The scripts document computational steps from a Nanopore genome analysis performed on a Linux laptop using Conda environments. Users should adapt input paths, software environments and computational resources to their own systems.
 
-## Acknowledgements
-
-I thank the original dataset generators and submitters, NCBI and the developers of the analysis tools. 
-
 ## Documentation and references
 
 - [SRA Toolkit FASTQ extraction](https://github.com/ncbi/sra-tools/wiki/HowTo%3A-fasterq-dump)
@@ -445,4 +441,3 @@ I thank the original dataset generators and submitters, NCBI and the developers 
 - [BLAST documentation](https://www.ncbi.nlm.nih.gov/books/NBK279690/)
 - [Barrnap](https://github.com/tseemann/barrnap)
 - [NCBI data-use policy](https://www.ncbi.nlm.nih.gov/home/about/policies/)
-
