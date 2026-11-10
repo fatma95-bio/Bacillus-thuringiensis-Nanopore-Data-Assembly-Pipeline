@@ -12,9 +12,7 @@ The aim is to help students and beginners follow the analysis, understand the ou
 
 ## Analysis question
 
-What assembly can be reconstructed from these Nanopore reads, and how well do read mapping and genome quality estimates support the assembled contigs?
-
-## Analysis workflow
+How well can the genome of Bacillus thuringiensis be reconstructed from Nanopore reads, and what do read mapping and assembly quality assessments reveal about the resulting contigs?
 
 **Public SRA data → FASTQ extraction → FastQC and NanoPlot → Dorado adapter trimming → Flye assembly → QUAST and CheckM2 → Read mapping → Contigs verification**
 
