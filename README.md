@@ -1,14 +1,14 @@
-# Nanopore Data Assembly and Quality Assessment Pipeline for Bacillus thuringiensis W-22
+# Nanopore Data Assembly and Quality Assessment Pipeline for Bacillus thuringiensis strain
 
-An educational workflow for quality control, adapter trimming, de novo genome assembly and assembly evaluation using public Oxford Nanopore reads.
-
-This project documents my practical training in bacterial genome analysis. My contribution is the computational analysis, interpretation and workflow documentation. I did not isolate the strain or generate the sequencing data.
+An educational workflow for read quality control, adapter trimming, de novo genome assembly and assembly quality assessment using public Oxford Nanopore reads of **Bacillus thuringiensis strain W-22**. 
 
 ## Project overview
 
-Long Nanopore reads can help reconstruct bacterial chromosomes and plasmid sequences, including regions that are difficult to resolve with short reads. Repeats and small contigs can nevertheless remain uncertain after assembly.
+Oxford Nanopore reads can span repetitive DNA regions and help reconstruct bacterial chromosomes and plasmids. However, repeats and small contigs may still require additional checks to assess how confidently they were assembled.
 
-This repository presents a practical analysis of public reads from Bacillus thuringiensis strain W-22. It is a learning case study carried out on a Linux laptop, covering read quality assessment, adapter trimming, assembly and evaluation.
+This repository documents a practical training in genome assembly using public Bacillus thuringiensis  sequencing data. The analysis was performed on a Linux laptop using Conda environments and covers read quality assessment, adapter trimming, de novo assembly and evaluation through genome quality estimates and read mapping.
+
+The aim is to help students and beginners follow the analysis, understand the outputs of each tool and recognize the limitations of assembly quality metrics. The sequencing data were generated and deposited by the original study contributors.
 
 ## Analysis question
 
@@ -66,13 +66,9 @@ Software must already be available. Installation instructions are outside the sc
 
 Commands below are organized for reuse from one project directory. They use relative paths instead of a personal home-directory path. Activate the environment containing each tool before running it. Output folder names are kept consistent here; individual exploratory runs during training sometimes used other folder names.
 
-Keep the original reads and assembly. These commands can create or overwrite output files, so do not repeat completed runs in the same folders without checking existing results.
-
 ## 1. Download reads and prepare FASTQ
 
 **Script:** [Download and extract FASTQ](01_download_extract.sh). Run this optional script from the parent of the project directory.
-
-The original training run started with a downloaded `SRR41146856.fastq.gz` file. The archive route below is an alternative way to obtain the reads, not a claim that it was the original download method.
 
 ### Download the SRA archive with wget
 
@@ -87,8 +83,6 @@ wget \
   -O raw_reads/SRR41146856/SRR41146856.sra
 ```
 
-`wget` downloads the archive; `-O` sets its local filename. The archive contains SRA data and is not a gzip-compressed FASTQ.
-
 ### Extract FASTQ with SRA Toolkit
 
 ```bash
@@ -96,8 +90,6 @@ fasterq-dump raw_reads/SRR41146856 \
   --threads 2 \
   --outdir raw_reads
 ```
-
-This extracts reads and quality scores into FASTQ.
 
 For this single-read Nanopore run, the expected working file is:
 
@@ -167,15 +159,13 @@ Main visual report: `NanoPlot_raw/NanoPlot-report.html`.
 | Median reported read quality | Q21.7 |
 | Longest read | 98,240 bp |
 
-Read N50 means that half of the sequenced bases occur in reads at least 10,060 bp long. Reported quality scores are basecaller predictions, not an independent measurement of sequencing errors. No blanket read-quality filter was applied at this stage.
+Read N50 means that half of the sequenced bases occur in reads at least 10,060 bp long. 
 
-## 3. Trim adapters with Dorado
-
-**Script:** [Adapter trimming](03_dorado_trim.sh). The script processes all reads.
+**Script:** [Adapter trimming](03_dorado_trim.sh). 
 
 The supplied metadata described a Rapid Barcoding Kit 96 V14 library. Dorado used the kit identifier `SQK-RBK114-96`. This kit setting belongs to this dataset and should not be assumed for another run.
 
-### Process all reads
+### Process 
 
 ```bash
 mkdir -p dorado_trimming
@@ -276,8 +266,6 @@ checkm2 predict \
 cat checkm2_flye_results/quality_report.tsv
 ```
 
-An existing CheckM2 database must already be configured.
-
 | Measure | Result |
 |---|---:|
 | Estimated completeness | 100% |
@@ -292,7 +280,7 @@ These are encouraging content-quality estimates. They do not establish chromosom
 
 **Script:** [Read mapping and coverage](06_map_reads.sh).
 
-The original reads were mapped to the trimmed-read assembly to inspect read support. This comparison uses the assembled contigs as the target; it does not align contigs to a published reference.
+The original reads were mapped to the trimmed-read assembly to inspect read support. 
 
 ```bash
 mkdir -p read_mapping
@@ -345,13 +333,11 @@ cat read_mapping/coverage_per_contig.tsv
 - **Mean depth** is the average aligned read coverage at a position.
 - **MAPQ** describes confidence of read placement, not basecall accuracy.
 
-Contig 2 was the only contig with incomplete coverage (82.81%) and near-zero mean MAPQ (0.289), making it the clearest mapping concern. All other contigs had 100% coverage and high mean MAPQ. Contig 4 had unusually high depth, but this alone did not demonstrate an assembly error or contamination. Read coverage and MAPQ do not independently establish correct joins or circularity.
+Contig 2 was the only contig with incomplete coverage (82.81%) and near-zero mean MAPQ (0.289), making it the clearest mapping concern. All other contigs had 100% coverage and high mean MAPQ. 
 
 ## 7. Verify contig 2
 
 The mapping summary identified contig 2 as the clearest concern: it was 5,586 bp long, with 82.81% coverage, mean depth 11.53 and mean MAPQ 0.289. We investigated whether its sequence was already represented in the chromosome candidate and whether it contained rRNA genes.
-
-This section is the endpoint of the analysis presented here. It does not include a contig-removal step, annotation or later small-contig investigations.
 
 **Scripts:** [Contig 2 extraction and BLAST](07a_verify_contig2.sh) and [rRNA prediction](07b_contig2_rrna.sh). The scripts use separate tools; activate an environment containing the required programs before each one.
 
@@ -385,7 +371,7 @@ blastn \
 cat contig2_verification/contig2_vs_other_contigs.tsv
 ```
 
-The following key results are retained from the earlier comparison against contigs 1, 3, 5 and 6. The command above now includes contig 4 as well; this revised target set has not been rerun here. The recorded matches were to **contig 1, the main chromosome candidate**:
+ The recorded matches were to **contig 1, the main chromosome candidate**:
 
 | Query positions in contig 2 | Subject positions in contig 1 | Identity |
 |---|---|---:|
@@ -407,15 +393,11 @@ barrnap --kingdom bac --threads 2 \
 cat contig2_verification/rrna_predictions.gff
 ```
 
-The original Barrnap run used the two-contig extraction and reported these features on contig 2. The focused command above reruns prediction on contig 2 alone.
-
 | Predicted feature | Contig 2 positions | Strand |
 |---|---|---|
 | 5S rRNA | 1–108 | minus |
 | 23S rRNA | 211–3,132 | minus |
 | 16S rRNA | 3,279–4,830 | minus |
-
-The minus strand describes orientation and is not an error.
 
 ### Conclusion of contig 2 verification
 
@@ -449,6 +431,7 @@ The scripts document computational steps from a Nanopore genome analysis perform
 ## Acknowledgements
 
 I thank the original dataset generators and submitters, NCBI and the developers of the analysis tools. 
+
 ## Documentation and references
 
 - [SRA Toolkit FASTQ extraction](https://github.com/ncbi/sra-tools/wiki/HowTo%3A-fasterq-dump)
